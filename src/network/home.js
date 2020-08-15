@@ -5,3 +5,8 @@ export function getHomeMultiData() {
         url:'/getSwiper.php'
     })
 }
+export function getHomeRecommond() {
+    return request({
+        url:'/navList.php'
+    })
+}
