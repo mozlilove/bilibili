@@ -1,16 +1,15 @@
 <template>
   <div id="app">
-    <router-view></router-view>
-    <tabbar-main></tabbar-main>
+    <register></register>
   </div>
 </template>
 
 <script>
-import TabbarMain from 'components/content/maintabbar/MainTabbar.vue';
+import Register from 'views/register/Register';
 export default {
   name:'App',
   components:{
-    TabbarMain
+    Register
   }
 }
 </script>
