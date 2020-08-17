@@ -1,20 +1,30 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-const Register = () => import('views/register/Register.vue')
+import Register from 'views/register/Register'
+import Login from 'views/login/Login'
+import Profile from 'views/profile/Profile'
 //安装插件
 Vue.use(Router);
 //创建路由实例
 const routes = [
     {
         path:'',
-        redirect:'/register'
+        redirect:'/login'
     },
     {
         path:'/register',
         component:Register
 
-    }
+    },
+    {
+        path:'/login',
+        component:Login
+    },
+    {
+        path:'/profile',
+        component:Profile
+    },
 ]
 
 const router = new Router({

@@ -30,12 +30,12 @@ export default {
 .topBar{
     display: flex;
     height: 44px;
-    line-height: 44px;
     text-align: center;
-    font-size: 16px/360*100;
+    align-items: center;
 }
-.left .right{
-    width: 60px;
+.left .right {
+    width: 30vw;
+    float: right;
 }
 .center {
     flex: 1;

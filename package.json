@@ -1,5 +1,5 @@
 {
-  "name": "mymall",
+  "name": "bilibili",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -16,6 +16,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "http-vue-loader": "^1.4.2",
     "vue-template-compiler": "^2.6.11"
   }
 }

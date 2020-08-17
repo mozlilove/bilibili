@@ -1,32 +1,32 @@
 <template>
   <div id="register" class="register">
     <nav-bar>
-      <div slot="center">注册BiliBili</div>
+      <div slot="center">登录BiliBili</div>
     </nav-bar>
-    <text-input
-      label="昵称"
-      type="text"
-      placeholder="请输入昵称"
-      rule="^.{6,16}$"
-      style="margin:3vw 0"
-      @inputChange="res => this.userInfo.name = res"
-    />
     <text-input
       label="账号"
       type="text"
       placeholder="请输入账号"
+      style="margin: 4vw 0"
       rule="^.{6,16}$"
-      @inputChange="res => this.userInfo.username = res"
+      @inputChange="res => (this.userInfo.username = res)"
     />
     <text-input
       label="密码"
       type="password"
       placeholder="请输入密码"
+      style="margin: 4vw 0"
       rule="^.{6,16}$"
-      @inputChange="res => this.userInfo.password =res"
+      @inputChange="res => (this.userInfo.password = res)"
     />
-    <diy-button @click.native="RegisterSubmit" class="register-btn" width="100%" height="12.5vw" btnText="注册"/>
-    <div class="change" @click="$router.push('/login')">切换到登录</div>
+    <diy-button
+      @click.native="LoginSubmit"
+      class="login-btn"
+      width="100%"
+      height="12.5vw"
+      btnText="登录"
+    />
+    <div class="change" @click="$router.push('/register')">切换到注册</div>
   </div>
 </template>
 
@@ -36,16 +36,16 @@ import TextInput from "components/common/input/TextInput";
 import DiyButton from "components/common/button/Button";
 
 import request from 'network/request';
+
 export default {
-  name: "Register",
+  name: "Login",
   data() {
-      return {
-          userInfo:{
-              name:'',
-              username:'',
-              password:''
-          }
+    return {
+      userInfo: {
+        username: "",
+        password: ""
       }
+    };
   },
   components: {
     NavBar,
@@ -53,27 +53,20 @@ export default {
     DiyButton
   },
   methods:{
-      RegisterSubmit() {
+      LoginSubmit() {
           //再次检验输入是否合法以及全部填写，并提交数据
           let rule = /^.{6,16}$/
-          if(rule.test(this.userInfo.name) 
-            && rule.test(this.userInfo.username) 
+          if(rule.test(this.userInfo.username) 
             && rule.test(this.userInfo.password)){
               // console.log('success');
               request(
                 'POST',
                 [
-                  '/register',
+                  '/login',
                   this.userInfo
                 ]     
               ).then(res => {
-                  console.log(res);
                   this.$toast.fail(res.data.msg)
-                  localStorage.setItem('id',res.data.id)
-                  localStorage.setItem('token',res.data.objtoken)
-                  setTimeout( () => {
-                    this.$router.push('/login')
-                  },1000)
               }).catch(err => {
                   console.log(err);
               })
@@ -86,7 +79,7 @@ export default {
 </script>
 
 <style>
-.register-btn{
+.login-btn{
     padding: 4.16vw 2.778vw;
     
 }

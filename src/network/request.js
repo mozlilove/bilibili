@@ -10,7 +10,7 @@ export default function request(method,config){
         timeout:5000
     })
     if(method == 'GET') {
-        return instance.get(config[0])
+        return instance.get(config[0],config[1])
     }else if(method == 'POST') {
         return instance.post(config[0],config[1])
     }
