@@ -1,4 +1,4 @@
-# mall
+# bilibili
 
 ## Project setup
 ```

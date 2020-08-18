@@ -60,12 +60,9 @@ export default {
             && rule.test(this.userInfo.username) 
             && rule.test(this.userInfo.password)){
               // console.log('success');
-              request(
-                'POST',
-                [
+              request.post(
                   '/register',
-                  this.userInfo
-                ]     
+                  this.userInfo     
               ).then(res => {
                   console.log(res);
                   this.$toast.fail(res.data.msg)

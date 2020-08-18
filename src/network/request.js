@@ -1,17 +1,35 @@
-import axios from 'axios'
+import axios from "axios";
+import router from "@/router";
+import Vue from 'vue'
 /**
- * 封装axios，对不同请求进行封装
- * @param {*} method :String
- * @param {*} config :Array,必须含有且第一项为url，当method为post时第二项必须为data
+ * 创建实例
  */
-export default function request(method,config){
-    const instance = axios.create({
-        baseURL:'http://112.74.99.5:3000/web/api',
-        timeout:5000
-    })
-    if(method == 'GET') {
-        return instance.get(config[0],config[1])
-    }else if(method == 'POST') {
-        return instance.post(config[0],config[1])
+const request = axios.create({
+  baseURL: "http://112.74.99.5:3000/web/api",
+  timeout: 5000
+});
+/**
+ * 请求前拦截
+ */
+request.interceptors.request.use(config => {
+  if (localStorage.getItem("id") && localStorage.getItem("token")) {
+        config.headers.Authorization = 'Bearer ' + localStorage.getItem("token")
+  }
+    return config;
+},error => {
+    return Promise.reject(error)
+})
+/**
+ * 接受响应前拦截
+ */
+request.interceptors.response.use(response => {
+    console.log(response);
+    return response
+},error => {
+    if(error.response.status == 401 || error.response.status ==402) {
+        Vue.prototype.$toast.fail(error.response.data.message)
+        router.push('/login')
     }
-}
+    return Promise.reject(error)
+})
+export default request

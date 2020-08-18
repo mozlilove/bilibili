@@ -51,7 +51,7 @@ export default {
 }
 .right{
     display: flex;
-    margin: 0 1vw;
+    margin-left: 2vw;
 }
 .right img {
     width: 6.4vw;
@@ -61,7 +61,7 @@ export default {
     width: 21vw;
     line-height: 6.4vw;
     font-size: 3.46vw;
-    margin-left: 3.2vw;
+    margin-left: 3vw;
     background-color: #fb7299;
     color: #fff;
     border-radius: 0.533vw;

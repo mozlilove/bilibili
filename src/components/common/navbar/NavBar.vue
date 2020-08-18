@@ -29,9 +29,10 @@ export default {
 <style>
 .topBar{
     display: flex;
-    height: 44px;
+    height: 11.7333vw;
     text-align: center;
     align-items: center;
+    padding: 0 3.2vw 0 0;
 }
 .left .right {
     width: 30vw;

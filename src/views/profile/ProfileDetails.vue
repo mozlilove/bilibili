@@ -3,7 +3,8 @@
     <div class="part1">
       <!--头像-->
       <div class="avatar">
-        <img src="~assets/img/head_img.jpg" alt="" />
+        <img v-if="userInfo.user_img" :src="userInfo.user_img" alt=""/> 
+        <img v-else src="~assets/img/head_img.jpg" alt="" />
       </div>
       <!--个人粉丝、关注和获赞，以及编辑按钮-->
       <div class="info">
@@ -14,7 +15,7 @@
           </span>
         </div>
         <div class="follow-btn">
-          <button class="info-edit">
+          <button class="info-edit" @click="$router.push('/edit')">
             编辑资料
           </button>
         </div>
@@ -23,14 +24,17 @@
     <div class="part2">
       <!--个人信息：昵称，性别，等级-->
       <div class="base">
-        <span class="nickname">没硬币修改昵称了</span>
+        <span class="nickname">{{ userInfo.name }}</span>
         <span class="sex"></span>
         <span class="level"></span>
       </div>
       <!--签名-->
-        <span class="motto">
-          热爱，从未停止。
-        </span>
+      <span class="motto" v-if="userInfo.user_desc">
+        {{userInfo.user_desc}}
+      </span>
+      <span class="motto" v-else>
+        这个人很神秘，神秘都没有写
+      </span>
     </div>
   </div>
 </template>
@@ -55,7 +59,8 @@ export default {
         }
       ]
     };
-  }
+  },
+  props: ["userInfo"]
 };
 </script>
 
@@ -137,7 +142,7 @@ export default {
 .motto {
   display: inline-block;
   height: 4.5vw;
-  margin: 2.2vw  0;
+  margin: 2.2vw 0;
   color: #999;
   white-space: nowrap;
   text-overflow: ellipsis;

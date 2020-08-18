@@ -2,7 +2,7 @@
   <div id="profile" class="profile">
       <top-bar/>
       <img src="~assets/img/bannerTop_new.png" alt="" class="background">
-      <profile-details/>
+      <profile-details :userInfo="userInfo"/>
   </div>
 </template>
 
@@ -17,17 +17,17 @@ export default {
         TopBar,
         ProfileDetails
     },
+    data() {
+        return {
+            userInfo:{}
+        }
+    },
     methods:{
         getUserInfo() {
-            request('GET',[
-                '/user/',
-                {
-                    params:{
-                        id:localStorage.getItem('id')
-                    }
-                }   
-            ]).then(res => {
-                console.log(res);
+            request.get('/user/'+ localStorage.getItem('id') 
+            ).then(res => {
+                console.log(res.data);
+                this.userInfo =  res.data[0]
             })
         }
     },

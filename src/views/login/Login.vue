@@ -59,14 +59,16 @@ export default {
           if(rule.test(this.userInfo.username) 
             && rule.test(this.userInfo.password)){
               // console.log('success');
-              request(
-                'POST',
-                [
-                  '/login',
-                  this.userInfo
-                ]     
+              request.post(
+                '/login',
+                  this.userInfo 
               ).then(res => {
                   this.$toast.fail(res.data.msg)
+                  localStorage.setItem('token',res.data.token)
+                  localStorage.setItem('id',res.data.id)
+                  setTimeout(() => {
+                    this.$router.push('/profile')
+                  },1000)
               }).catch(err => {
                   console.log(err);
               })
