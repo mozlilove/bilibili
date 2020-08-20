@@ -1,5 +1,6 @@
 <template>
-    <div class="editinput">
+    <div class="editinput" @click="InputClick">
+        <slot></slot>
         <div class="input-name">
             <slot  name="left"></slot>
         </div>
@@ -11,7 +12,12 @@
 
 <script>
 export default {
-    name:'EditInput'
+    name:'EditInput',
+    methods:{
+        InputClick() {
+            this.$emit('InputClick')
+        }
+    }
 }
 </script>
 

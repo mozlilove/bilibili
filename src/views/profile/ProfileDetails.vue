@@ -65,10 +65,12 @@ export default {
 </script>
 
 <style>
-.part1 {
-  display: flex;
+.profileDetails{
   background-color: #fff;
   padding: 0 3.2vw;
+}
+.part1 {
+  display: flex;
 }
 .avatar {
   position: relative;
@@ -123,13 +125,8 @@ export default {
   border: 0.133vw solid #fb7299;
 }
 .part2 {
-  background-color: #fff;
-  padding: 0 3.2vw;
   border-bottom: 1px solid #e7e7e7;
-}
-.base {
-  display: block;
-  margin-top: 2.8vw;
+  margin-top: 3.2vw;
 }
 .nickname {
   display: inline-block;

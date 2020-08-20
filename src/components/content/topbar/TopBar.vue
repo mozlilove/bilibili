@@ -1,7 +1,7 @@
 <template>
   <nav-bar color="white">
           <div slot="left" class="logo">
-              <img src="~assets/img/logo.png" alt="">
+              <img  src="~assets/img/logo.png" alt="">
           </div>
           <div slot="center" class="center">
               <p>
@@ -10,7 +10,8 @@
               </p>
           </div>
           <div slot="right" class="right">
-              <img src="~assets/img/default_img.jpg" alt="">
+              <img v-if="userInfo.user_img" :src="userInfo.user_img" alt="" @click="$router.push('/profile')">
+              <img v-else src="~assets/img/default_img.jpg" alt="">
               <div class="openApp">下载 App</div>
           </div>
       </nav-bar>
@@ -22,7 +23,8 @@ export default {
     name:'TopBar',
     components:{
         NavBar
-    }
+    },
+    props:['userInfo']
 }
 </script>
 
@@ -56,6 +58,8 @@ export default {
 .right img {
     width: 6.4vw;
     height: 6.4vw;
+    border-radius: 50%;
+    
 }
 .openApp{
     width: 21vw;
