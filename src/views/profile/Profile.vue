@@ -1,6 +1,6 @@
 <template>
   <div id="profile" class="profile">
-      <top-bar :userInfo="userInfo"/>
+      <top-bar/>
       <img src="~assets/img/bannerTop_new.png" alt="" class="background">
       <profile-details :userInfo="userInfo"/>
   </div>

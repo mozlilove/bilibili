@@ -1,5 +1,5 @@
 <template>
-  <div id="detail" @click="$router.push('/detail/'+ detailItem.id +'')">
+  <div id="detail" @click="pathPush">
     <div class="card">
         <img :src="detailItem.img" alt="">
         <div class="count">
@@ -21,7 +21,12 @@
 <script>
 export default {
     name:'Detail',
-    props:['detailItem']
+    props:['detailItem'],
+    methods:{
+        pathPush () {
+            this.$router.push('/article/'+ this.detailItem.id)
+        }
+    }
 }
 </script>
 
@@ -51,7 +56,7 @@ export default {
 .card img{
     width: 100%;
     height: 100%;
-    border-radius: 2px;
+    border-radius: 10%;
 }
 .title {
     font-size: 3.333vw;

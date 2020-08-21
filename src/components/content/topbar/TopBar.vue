@@ -1,6 +1,6 @@
 <template>
   <nav-bar color="white">
-          <div slot="left" class="logo">
+          <div slot="left" class="logo" @click="$router.push('/home')">
               <img  src="~assets/img/logo.png" alt="">
           </div>
           <div slot="center" class="center">
@@ -10,8 +10,8 @@
               </p>
           </div>
           <div slot="right" class="right">
-              <img v-if="userInfo.user_img" :src="userInfo.user_img" alt="" @click="$router.push('/profile')">
-              <img v-else src="~assets/img/default_img.jpg" alt="">
+              <img v-if="userInfo.user_img" :src="userInfo.user_img" alt="" @click="judge">
+              <img v-else src="~assets/img/default_img.jpg" alt="" @click="judge">
               <div class="openApp">下载 App</div>
           </div>
       </nav-bar>
@@ -19,37 +19,65 @@
 
 <script>
 import NavBar from 'components/common/navbar/NavBar';
+import request from 'network/request'
 export default {
     name:'TopBar',
+    data() {
+        return {
+            userInfo:{}
+        }
+    },
     components:{
         NavBar
     },
-    props:['userInfo']
+    methods:{
+        getUseInfo() {
+            request.get(
+                '/user/' + localStorage.getItem('id')
+            ).then(res => {
+                this.userInfo = res.data[0]
+            }).catch(err => {
+                console.log(err);
+            })
+        },
+        judge() {
+            if(this.userInfo){
+                this.$router.push('/profile')
+            }else{
+                this.$router.push('/login')
+            }
+        }
+    },
+    created() {
+        if(localStorage.getItem('id') && localStorage.getItem('token')){
+            this.getUseInfo()
+        }
+    }
 }
 </script>
 
 <style>
 .logo {
-    padding: 4px 0;
+    padding: 0.533vw 0;
 }
 .logo img{
-    width: 90px;
+    width: 12vw;
 }
 .center p {
     display: flex;
     position: relative;
     background-color: #f4f4f4;
-    padding: 5px 0;
-    border-radius: 10px;
+    padding: 0.667vw 0;
+    border-radius: 1.333vw;
 }
 .center p .search{
-    margin-left: 6px;
+    margin-left: 0.8vw;
 }
 .center p  span {
-    font-size: 12px;
+    font-size: 1.6vw;
     text-align: center;
     vertical-align: bottom;
-    margin-left: 6px;
+    margin-left: 0.8vw;
 }
 .right{
     display: flex;

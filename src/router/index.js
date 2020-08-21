@@ -6,6 +6,7 @@ import Login from "views/login/Login";
 import Profile from "views/profile/Profile";
 import Edit from "views/profile/Edit";
 import Home from "views/home/Home"
+import Article from "views/article/Article"
 //安装插件
 Vue.use(Router);
 //创建路由实例
@@ -38,7 +39,14 @@ const routes = [
   },
   {
     path:"/home",
-    component:Home
+    component:Home,
+    meta:{
+      keepalive:true
+    }
+  },
+  {
+    path:'/article/:id',
+    component:Article
   }
 ];
 
