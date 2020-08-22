@@ -32,7 +32,7 @@
         <detail class="detail" v-for="(item ,index) in recommend"  :key="index" :detailItem="item" />
     </div>
 
-    <comment :article="article"></comment>
+    <comment :article="article" @submitComment="dealComment"></comment>
   </div>
 </template>
 
@@ -47,7 +47,12 @@ export default {
   data() {
     return {
       article: null,
-      recommend:[]
+      recommend:[],
+      postComment:{
+        comment_content:'',
+        comment_date:'',
+        article_id:0
+      }
     };
   },
   components: {
@@ -74,6 +79,30 @@ export default {
         }).then(err => {
 
         })
+    },
+    dealComment(comment){
+      const date = new Date()
+      let m = date.getMonth() + 1
+      let d = date.getDay()
+      if(m < 10){
+        m = '0' + m
+      }
+      if(d < 10){
+        d = '0' + d
+      }
+      let dateStr = `${m}-${d}`
+      this.postComment.comment_content = comment
+      this.postComment.comment_date = dateStr
+      this.postComment.article_id = this.$route.params.id
+
+      request.post(
+        '/comment_post/'+ localStorage.getItem('id'),
+        this.postComment
+      ).then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      })
     }
   },
   watch:{
