@@ -2,49 +2,42 @@
   <div class="replyComment">
     <ul class="reply-comment-detail">
       <li v-for="(item, index) in replyComment" :key="index" class="second-li">
-        <span class="reply-comment_userimg">
-          <img v-if="item.userinfo.user_img" :src="item.userinfo.user_img" />
-          <img v-else src="~assets/img/default_img.jpg" alt="" />
-        </span>
-        <div class="reply-comment-title">
-          <span class="reply-comment_username">{{
-            item.userinfo.name ? item.userinfo.name : "匿名用户"
-          }}</span>
-          <p class="reply-comment_date">{{ item.comment_date }}</p>
-        </div>
-        <div class="reply-comment-content">
-          {{ item.comment_content }}
-        </div>
-        <!--三级评论-->
-        <ul class="third-reply-comment">
-          <li
-            v-for="(thirditem, index) in item.child"
-            :key="index"
-            class="third-li"
-          >
-            <span class="reply-comment_userimg">
-              <img
-                v-if="thirditem.userinfo.user_img"
-                :src="thirditem.userinfo.user_img"
-              />
-              <img v-else src="~assets/img/default_img.jpg" alt="" />
-            </span>
-            <div class="reply-comment-title">
-              <span class="reply-comment_username">{{
-                thirditem.userinfo.name ? thirditem.userinfo.name : "匿名用户"
-              }}</span>
-              <p class="reply-comment_date">{{ thirditem.comment_date }}</p>
-            </div>
-            <div class="thidr-reply-comment-content">
+        <!--二级评论-->
+        <div
+          class="second-li-block"
+          @click="replyClick(item.comment_id, item.userinfo.name)"
+        >
+          <span class="reply-comment_userimg">
+            <img v-if="item.userinfo.user_img" :src="item.userinfo.user_img" />
+            <img v-else src="~assets/img/default_img.jpg" alt="" />
+          </span>
+          <div class="reply-comment-title">
+            <span class="reply-comment_username">{{
+              item.userinfo.name ? item.userinfo.name : "匿名用户"
+            }}</span>
+            <p class="reply-comment_date">{{ item.comment_date }}</p>
+          </div>
+          <div class="reply-comment-content">
+            <span v-if="temp">
               <span class="reply-target">
                 回复
-                <p>{{ thirditem.parent_user_info.name }}</p>
+                <p>{{ item.parent_user_info.name }}</p>
                 :
               </span>
-              <span class="content">{{ thirditem.comment_content }}</span>
-            </div>
-          </li>
-        </ul>
+              <span class="content">{{ item.comment_content }}</span>
+            </span>
+            <span v-else>
+              <span class="content">{{ item.comment_content }}</span>
+            </span>
+          </div>
+        </div>
+         <!--递归调用自身，显示二级一下评论-->
+          <reply-comment
+            :replyComment="item.child"
+            @childCommentId="getChildCommentId"
+            :temp="true"
+            style="padding-left:0"
+          ></reply-comment>
       </li>
     </ul>
   </div>
@@ -53,20 +46,31 @@
 <script>
 export default {
   name: "ReplyComment",
-  props: ["replyComment"]
+  props: ["replyComment",'temp'],
+  methods: {
+    replyClick(id, name) {
+      // console.log(id,name);
+      this.$emit("replyCommentId", id, name);
+      this.$emit('childCommentId',id,name)
+    },
+    getChildCommentId(id,name) {
+      this.replyClick(id,name)
+    }
+  }
 };
 </script>
 
 <style lang="less">
 .replyComment {
-  margin-left: 12vw;
+  padding-left: 12vw;
   .reply-comment-detail {
     position: relative;
     margin-top: 2vw;
     clear: both;
     .second-li {
       display: block;
-      padding: 3.2vw 0;
+      width: 100%;
+      padding-top: 3.2vw;
       border-top: 1px solid #eee;
       .reply-comment_userimg {
         position: absolute;
@@ -102,20 +106,8 @@ export default {
         color: #212121;
         white-space: pre-line;
         word-break: break-word;
-      }
-      .third-reply-comment {
-        .third-li {
-          padding-top: 3.2vw;
-          border-top: 1px solid #eee;
-          .thidr-reply-comment-content {
-            display: flex;
-            flex-direction: row;
-            margin-top: 2.4vw;
-            font-size: 3.46667vw;
-            color: #212121;
-            white-space: pre-line;
-            word-break: break-word;
             .reply-target {
+              float: left;
               display: flex;
               flex-direction: row;
               color: #757575;
@@ -125,13 +117,6 @@ export default {
                 color: #5090cc;
               }
             }
-            .content {
-              padding-left: 2vw;
-              white-space: pre-line;
-               word-break: break-word;
-            }
-          }
-        }
       }
     }
   }

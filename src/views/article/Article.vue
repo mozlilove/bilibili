@@ -24,7 +24,14 @@
         }}弹幕</span>
         <span class="date">{{ article.date }}</span>
       </div>
+
+      <div class="video-toolbar">
+        <span class="video-star" @click="collect" :class="{activeChose:activeColor}"><img src="~assets/img/star.svg">收藏</span>
+        <span class="video-download" @click="download"><img src="~assets/img/download.svg">下载</span>
+        <span class="video-share" @click="share"><img src="~assets/img/share.svg">分享</span>
+      </div>
     </div>
+
 
     
 
@@ -32,7 +39,7 @@
         <detail class="detail" v-for="(item ,index) in recommend"  :key="index" :detailItem="item" />
     </div>
 
-    <comment :article="article" @submitComment="dealComment"></comment>
+    <comment :article="article" @submitComment="dealComment" ref="commentRef" @replyCommentId="getReplyCommentId"></comment>
   </div>
 </template>
 
@@ -51,8 +58,10 @@ export default {
       postComment:{
         comment_content:'',
         comment_date:'',
-        article_id:0
-      }
+        article_id:null,
+        parent_id:null
+      },
+      activeColor:null
     };
   },
   components: {
@@ -83,7 +92,7 @@ export default {
     dealComment(comment){
       const date = new Date()
       let m = date.getMonth() + 1
-      let d = date.getDay()
+      let d = date.getDate()
       if(m < 10){
         m = '0' + m
       }
@@ -99,21 +108,74 @@ export default {
         '/comment_post/'+ localStorage.getItem('id'),
         this.postComment
       ).then(res => {
-        console.log(res);
+        // console.log(res);
+        this.$toast.fail("评论成功");
+        //刷新，从新获取评论
+        this.$refs.commentRef.content = ''
+        this.$refs.commentRef.getCommentInfo()
       }).catch(err => {
-        console.log(err);
+        // console.log(err);
+        this.$toast.fail("出了点小错误");
       })
+    },
+    //获取回复目标评论的id
+    getReplyCommentId(id) {
+      this.postComment.parent_id = id
+    },
+    //收藏文章
+    collect() {
+      if(localStorage.getItem('id')&&localStorage.getItem('token')){
+        request.post(
+          '/collection/'+localStorage.getItem('id'),
+          {
+            article_id:this.$route.params.id
+          }
+        ).then(res => {
+          if(res.data.msg === '收藏成功'){
+            this.$toast.fail('收藏成功')
+            this.activeColor = true
+          }else if( res.data.msg === '取消收藏成功'){
+            this.$toast.fail('取消收藏成功')
+            this.activeColor = false
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      }
+    },
+    download() {
+
+    },
+    share() {
+
+    },
+    //获取收藏状态
+    getCollection() {
+      if(localStorage.getItem('token')&& localStorage.getItem('id')){
+        request.get(
+          '/collection/'  + localStorage.getItem('id'),
+          {
+            params:{
+              article_id:this.$route.params.id
+            }
+          }
+        ).then(res => {
+          this.activeColor =res.data.success
+        })
+      }
     }
   },
   watch:{
       $route() {
           this.getArticle();
           this.getRecommend();
+          this.getCollection()
       }
   },
   created() {
     this.getArticle();
     this.getRecommend();
+    this.getCollection()
   }
 }
 </script>
@@ -128,6 +190,7 @@ export default {
 .article-Info {
   margin-top: 4vw;
   padding: 0 3.2vw;
+  border-bottom: 0.133vw solid #eee;
   .title {
     position: relative;
     display: flex;
@@ -176,6 +239,20 @@ export default {
     color: #999;
     padding-bottom: 2vw;
   }
+  .video-toolbar{
+    font-size: 3vw;
+    color: #999999;
+    padding: 2vw 0;
+    img{
+      width: 6vw;
+      height: 6vw;
+      vertical-align: middle;
+      margin-right: 1.2vw;
+    }
+    .video-star,.video-download,.video-share{
+      margin-right: 3.2vw;
+    }
+  }
 }
 .recommend{
     display: flex;
@@ -185,5 +262,8 @@ export default {
         width: 45%;
         margin-top: 3.2vw;
     }
+}
+.activeChose{
+  color: #fb7299;
 }
 </style>

@@ -13,14 +13,15 @@
         <img v-else src="~assets/img/default_img.jpg" alt="" />
       </div>
       <div class="input-box">
-        <input v-model="content" type="text" placeholder="说点什么" @focus="judgeUser" />
+        <input v-model="content" type="text" :placeholder="placeholder" @focus="judgeUser"  ref="inputFocus"/>
       </div>
       <button @click="submitComment">发表</button>
     </div>
 
     <ul class="comment-detail">
       <li v-for="(item, index) in comment" :key="index" class="first-li">
-        <span class="comment_userimg">
+        <div class="li-block" @click="replyComment(item.comment_id,item.userinfo.name)">
+                  <span class="comment_userimg">
           <img v-if="item.userinfo.user_img" :src="item.userinfo.user_img" />
           <img v-else src="~assets/img/default_img.jpg" alt="" />
         </span>
@@ -31,9 +32,11 @@
           <p class="comment_date">{{ item.comment_date }}</p>
         </div>
         <div class="comment-content">
-          {{ item.comment_content }}
+          {{ item.comment_content?item.comment_content:''}}
         </div>
-        <reply-comment :replyComment="item.child"></reply-comment>
+        </div>
+        <!--二级及三级评论-->
+        <reply-comment :replyComment="item.child" @replyCommentId="getReplyCommentId"></reply-comment>
       </li>
     </ul>
   </div>
@@ -47,9 +50,10 @@ export default {
   data() {
     return {
       userInfo: {},
-      comment: [],
+      comment: null,
       count:0,
-      content:''
+      content:'',
+      placeholder:'你想说点什么'
     };
   },
   props: ["article"],
@@ -123,6 +127,25 @@ export default {
             }
         }
         this.count = len
+    },
+    //获取一级评论的id和name
+    replyComment(id,name) {
+      console.log(id,name);
+      this.placeholder = '@'+ name
+      this.$emit('replyCommentId',id)
+      this.focusInput()
+    },
+    //获取一级评论一下的id和name
+    getReplyCommentId(id,name) {
+      console.log(id,name);
+      this.placeholder = '@' + name
+      // console.log(id);
+      this.$emit('replyCommentId',id)
+      this.focusInput()
+    },
+    //回复时聚焦输入框
+    focusInput() {
+      this.$refs.inputFocus.focus()
     }
   },
   created() {
