@@ -17,7 +17,11 @@
       </div>
 
       <div class="data">
-        <span class="user">{{ article.userinfo.name }}</span>
+        <span class="user">
+          <img class="up-icon" src="~assets/img/up.svg">
+          <span>{{ article.userinfo.name }}</span>
+        </span>
+        
         <span class="play">2549.5w观看</span>
         <span class="dmcount">{{
           article.commentlen * Math.floor(Math.random()*10000+1)
@@ -234,10 +238,22 @@ export default {
   }
   .data {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     font-size: 3.2vw;
     color: #999;
     padding-bottom: 2vw;
+    .user{
+      color: #212121;
+      img{
+        width: 4vw;
+        height: 4vw;
+        vertical-align:middle;
+        margin-right: 1vw;
+      }
+      span{
+        vertical-align: middle;
+      }
+    }
   }
   .video-toolbar{
     font-size: 3vw;
