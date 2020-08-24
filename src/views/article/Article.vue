@@ -6,6 +6,19 @@
       <video width="100%" controls="controls" :src="article.content" />
     </div>
     <div class="article-Info">
+
+              <div class="user_img">
+          <img v-if="article.userinfo.user_img" :src="article.userinfo.user_img">
+          <img v-else src="~assets/img/default_img.jpg">
+        </div>
+      <div class="article-user">
+        <span class="user_name">{{article.userinfo.name}}</span>
+        <div class="user_subscription" @click="Subscribe" :class="{SubscriptionColor:subscribe}">
+          <img v-if="!subscribe" src="~assets/img/like.svg">
+          {{subscribe?'已关注':'关注'}}
+          </div>
+      </div>
+
       <div class="title">
         <div class="left">
           <span class="category">{{ article.category.title }}</span>
@@ -17,11 +30,6 @@
       </div>
 
       <div class="data">
-        <span class="user">
-          <img class="up-icon" src="~assets/img/up.svg">
-          <span>{{ article.userinfo.name }}</span>
-        </span>
-        
         <span class="play">2549.5w观看</span>
         <span class="dmcount">{{
           article.commentlen * Math.floor(Math.random()*10000+1)
@@ -65,7 +73,8 @@ export default {
         article_id:null,
         parent_id:null
       },
-      activeColor:null
+      activeColor:null,
+      subscribe:null
     };
   },
   components: {
@@ -81,6 +90,9 @@ export default {
         .then(res => {
           console.log(res.data[0]);
           this.article = res.data[0];
+          if(this.article){
+            this.getSubscription()
+          }
         })
         .catch(err => {});
     },
@@ -126,6 +138,27 @@ export default {
     getReplyCommentId(id) {
       this.postComment.parent_id = id
     },
+    //关注用户
+    Subscribe() {
+           if(localStorage.getItem('id')&&localStorage.getItem('token')){
+        request.post(
+          '/sub_scription/'+localStorage.getItem('id'),
+          {
+            sub_id:this.article.userid
+          }
+        ).then(res => {
+          if(res.data.msg === '关注成功'){
+            this.$toast.fail('关注成功')
+            this.subscribe = true
+          }else if( res.data.msg === '取消关注成功'){
+            this.$toast.fail('取消关注成功')
+            this.subscribe = false
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      }
+    },
     //收藏文章
     collect() {
       if(localStorage.getItem('id')&&localStorage.getItem('token')){
@@ -167,6 +200,21 @@ export default {
           this.activeColor =res.data.success
         })
       }
+    },
+    //获取订阅状态
+    getSubscription() {
+           if(localStorage.getItem('token')&& localStorage.getItem('id')){
+        request.get(
+          '/sub_scription/'  + localStorage.getItem('id'),
+          {
+            params:{
+              sub_id:this.article.userid
+            }
+          }
+        ).then(res => {
+          this.subscribe =res.data.success
+        })
+      }
     }
   },
   watch:{
@@ -195,14 +243,56 @@ export default {
   margin-top: 4vw;
   padding: 0 3.2vw;
   border-bottom: 0.133vw solid #eee;
+  position: relative;
+      .user_img{
+      display: inline-block;
+      padding-right: 2vw;
+      position: absolute;
+      img{
+        width:8vw;
+        height: 8vw;
+        vertical-align: middle;
+      }
+      
+    }
+  .article-user{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 10vw;
+    line-height: 10vw;
+    .user_name::before{
+       display: inline-block;
+      content: '';
+      height: 100%;
+      vertical-align: middle;
+    }
+    .user_name{
+      vertical-align: middle;
+      color: #212121;
+    }
+    .user_subscription{
+      background-color: #fb7299;
+      border-radius: 1vw;
+      font-size: 4vw;
+      color: #fff;
+      vertical-align: middle;
+      padding: 0 1vw;
+      img{
+       width: 5vw;
+       height: 5vw;
+       vertical-align: text-bottom;
+      }
+
+    }
+  }
   .title {
     position: relative;
     display: flex;
     justify-content: space-between;
-    padding-bottom: 2vw;
+    padding: 2vw 0;
     .left {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       width: 80%;
     }
     .category::before {
@@ -213,13 +303,13 @@ export default {
     }
     .category {
       display: inline-block;
-      line-height: 3vw;
+      line-height: 2vw;
       padding: 0 1.6vw;
       margin-right: 2vw;
       border-radius: 3.2vw;
       font-size: 3vw;
       color: #fb7299;
-      background-color: #f4f4f4;
+      background-color: #eee;
     }
     .name {
       font-size: 4.26667vw;
@@ -238,21 +328,12 @@ export default {
   }
   .data {
     display: flex;
-    justify-content: space-between;
     font-size: 3.2vw;
     color: #999;
     padding-bottom: 2vw;
-    .user{
-      color: #212121;
-      img{
-        width: 4vw;
-        height: 4vw;
-        vertical-align:middle;
-        margin-right: 1vw;
-      }
-      span{
-        vertical-align: middle;
-      }
+    span{
+      display: inline-block;
+      margin-right: 2vw;
     }
   }
   .video-toolbar{

@@ -179,8 +179,8 @@ export default {
     width: 100%;
     padding-bottom: 2vw;
     .userimg {
-      width: 6vw;
-      height: 6vw;
+      width: 8vw;
+      height: 8vw;
       margin-right: 2vw;
       img {
         width: 100%;
