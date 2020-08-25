@@ -31,11 +31,12 @@
 </template>
 
 <script>
-import NavBar from "components/common/navbar/NavBar";
-import TextInput from "components/common/input/TextInput";
-import DiyButton from "components/common/button/Button";
+const NavBar = () => import ("components/common/navbar/NavBar")
+const TextInput = () => import ("components/common/input/TextInput")
+const DiyButton = () => import ("components/common/button/Button")
 
-import request from 'network/request';
+const request = () => import ('network/request');
+
 export default {
   name: "Register",
   data() {
@@ -64,10 +65,7 @@ export default {
                   '/register',
                   this.userInfo     
               ).then(res => {
-                  console.log(res);
                   this.$toast.fail(res.data.msg)
-                  localStorage.setItem('id',res.data.id)
-                  localStorage.setItem('token',res.data.objtoken)
                   setTimeout( () => {
                     this.$router.push('/login')
                   },1000)

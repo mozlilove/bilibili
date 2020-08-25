@@ -31,11 +31,11 @@
 </template>
 
 <script>
-import NavBar from "components/common/navbar/NavBar";
-import TextInput from "components/common/input/TextInput";
-import DiyButton from "components/common/button/Button";
+const NavBar = () => import ("components/common/navbar/NavBar")
+const TextInput = () => import ("components/common/input/TextInput")
+const DiyButton = () => import ("components/common/button/Button")
 
-import request from 'network/request';
+import request from "network/request"
 
 export default {
   name: "Login",
@@ -52,41 +52,47 @@ export default {
     TextInput,
     DiyButton
   },
-  methods:{
-      LoginSubmit() {
-          //再次检验输入是否合法以及全部填写，并提交数据
-          let rule = /^.{6,16}$/
-          if(rule.test(this.userInfo.username) 
-            && rule.test(this.userInfo.password)){
-              // console.log('success');
-              request.post(
-                '/login',
-                  this.userInfo 
-              ).then(res => {
-                  this.$toast.fail(res.data.msg)
-                  localStorage.setItem('token',res.data.token)
-                  localStorage.setItem('id',res.data.id)
-                  setTimeout(() => {
-                    this.$router.push('/profile')
-                  },1000)
-              }).catch(err => {
-                  console.log(err);
-              })
-          }else{
-              this.$toast.fail('输入不合法')
-          }
+  methods: {
+    LoginSubmit() {
+      //再次检验输入是否合法以及全部填写，并提交数据
+      let rule = /^.{6,16}$/;
+      if (
+        rule.test(this.userInfo.username) &&
+        rule.test(this.userInfo.password)
+      ) {
+        // console.log('success');
+        request
+          .post("/login", this.userInfo)
+          .then(res => {
+            if (res.data.code === 200) {
+              this.$toast.fail(res.data.msg);
+              localStorage.setItem("token", res.data.token);
+              localStorage.setItem("id", res.data.id);
+              setTimeout(() => {
+                this.$router.push("/home");
+              }, 1000);
+            } else {
+              this.$toast.fail(res.data.msg);
+              return
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        this.$toast.fail("输入不合法");
       }
+    }
   }
 };
 </script>
 
 <style>
-.login-btn{
-    padding: 4.16vw 2.778vw;
-    
+.login-btn {
+  padding: 4.16vw 2.778vw;
 }
 .change {
-    text-align: center;
-    font-size: 3.61vw;
+  text-align: center;
+  font-size: 3.61vw;
 }
 </style>
