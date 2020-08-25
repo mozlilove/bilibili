@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import { Search } from "vant";
 
 const Register  = () => import ("views/register/Register")
 const Login  = () => import ("views/login/Login")
@@ -8,6 +9,7 @@ const Edit  = () => import ("views/profile/Edit")
 const Home  = () => import ("views/home/Home")
 const Article  = () => import ("views/article/Article")
 const EditCategory = () => import ('views/home/EditCategory')
+const SearchPage = () => import ('views/search/Search')
 //安装插件
 Vue.use(Router);
 //创建路由实例
@@ -52,6 +54,10 @@ const routes = [
   {
     path:'/editCategory',
     component:EditCategory
+  },
+  {
+    path:'/search',
+    component:SearchPage
   }
 ];
 

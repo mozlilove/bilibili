@@ -35,6 +35,8 @@ export default {
     position: relative;
     .count {
     position: absolute;
+    border-bottom-left-radius: 0.53333vw;
+    border-bottom-right-radius: 0.53333vw;
     bottom: 0;
     display: flex;
     font-size: 3.2vw;
@@ -56,7 +58,7 @@ export default {
 .card img{
     width: 100%;
     height: 100%;
-    border-radius: 10%;
+    border-radius: 0.53333vw;
 }
 .title {
     font-size: 3.333vw;

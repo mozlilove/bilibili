@@ -18,7 +18,7 @@
           v-for="(item, index) in category"
           :key="index"
           :title="item.title"
-          style="padding: 0 3.2vw"
+          style="padding: 0 1.3333vw"
         >
           <van-list
             v-model="item.loading"
@@ -138,10 +138,11 @@ export default {
 <style lang="less">
 .category {
   position: relative;
+  font-size: 3.7333vw;
   .categorySetting {
     position: absolute;
     width: 10vw;
-    height: 8.89vw;
+    height: 8vw;
     text-align: right;
     align-content: center;
     right: 0;
@@ -160,8 +161,8 @@ export default {
     flex-wrap: wrap;
     justify-content: space-between;
     .detail {
-      width: 45%;
-      margin-top: 3.2vw;
+      width: 50%;
+      padding: 2.13333vw 1.33333vw;
     }
   }
 }

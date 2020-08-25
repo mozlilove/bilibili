@@ -1,15 +1,10 @@
 <template>
   <nav-bar color="white">
           <div slot="left" class="logo" @click="$router.push('/home')">
-              <img  src="~assets/img/logo.png" alt="">
-          </div>
-          <div slot="center" class="center">
-              <p>
-                  <van-icon name="search" class="search" />
-                  <span>请输入内容</span>
-              </p>
+              <img  src="~assets/img/logo.svg" alt="">
           </div>
           <div slot="right" class="right">
+              <img style="margin-right:5vw" src="~assets/img/search.svg" alt="" @click="$router.push('/search')">
               <img v-if="userInfo.user_img" :src="userInfo.user_img" alt="" @click="judge">
               <img v-else src="~assets/img/default_img.jpg" alt="" @click="judge">
               <div class="openApp">下载 App</div>
@@ -59,9 +54,12 @@ export default {
 <style>
 .logo {
     padding: 0.533vw 0;
+    padding-left: 4.8vw;
+    margin-right: 2vw;
 }
 .logo img{
-    width: 12vw;
+    width: 17vw;
+    height: 8vw;
 }
 .center p {
     display: flex;
@@ -81,7 +79,6 @@ export default {
 }
 .right{
     display: flex;
-    margin-left: 2vw;
 }
 .right img {
     width: 6.4vw;
